@@ -1,0 +1,151 @@
+<html>
+    <head>
+        <title>welcome</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    </head>
+    <body>
+    
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <center>
+                        <h1>GDG JALANDHAR</h1>
+                        <hr>
+                        <p id="pdata"></p>
+                        <input type="text" class="form-control" placeholder="Enter Name" id="name">
+                        <br>
+                        <input type="text" class="form-control" placeholder="Email id" id="email">
+                        <br>
+                        <button id="submit" class="btn btn-primary">Submit Data</button>
+                         <button id="Logout" class="btn btn-primary">Logout</button>
+                        <!--    Creating div    -->
+                        <div id="data"></div>
+                        <br><br>
+                       <!--<button id="getData" class="btn btn-success">Get Data</button> -->
+                    </center>
+                </div>
+            </div>
+        </div>
+
+        
+    <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyCuFyl3lPMtlMBw1aO4dmFclNbMLN1hvBM",
+        authDomain: "shiv-d7b06.firebaseapp.com",
+        databaseURL: "https://shiv-d7b06.firebaseio.com",
+        projectId: "shiv-d7b06",
+        storageBucket: "shiv-d7b06.appspot.com",
+        messagingSenderId: "949157004267"
+      };
+      firebase.initializeApp(config);
+        
+        
+        //now i m creating firebase database reference
+        var dbref=firebase.database().ref('NewData');
+        
+        //call js event on button
+        //means when i click on submit button it will call addData function
+        //call js event on get data button
+        document.getElementById('submit').addEventListener('click',addData);
+       document.getElementById('Logout').addEventListener('click',logout); //document.getElementById('getData').addEventListener('click',getDataFromFbase); 
+        //getDataFromFbase function name
+        function logout(){
+            console.log("i am logout");
+        }
+        function addData(){
+            //get the value form input
+            var name=document.getElementById('name').value;
+            var email=document.getElementById('email').value;
+            
+            //now store the data in firebase database
+            //will pass the js object in push() methord
+            // js object means {}
+            dbref.push({
+                name:name,
+                email:email
+            }).then(function(){
+                alert("Data Added Successfully");
+            }).catch(function(){
+                alert("error");
+            })
+            
+            
+            //means push methord is sucess then will call a function else call the error function
+            // now i hosting this page live
+        }
+        
+        function getDataFromFbase(){
+            console.log("asd");
+            //till now ok?yes
+            //bolo lovely ki jai
+            
+            // ok there is methord on() in firebase  thatss it
+            // im using database refernce
+            // now ye firebase me data key-value pair ke form me store hota hai
+            //ok?ok so muje abb
+            //so ab me value firbease se read karuga tab ek function ko call karuga
+            // by default useme ek data pass hoga 
+            // data.val() se muje data dekega in terms of object
+            //lets check ok?ok
+        
+            //ye mera data aa gaya deka?yes yahi error mere mai bhi thi rules ni deha maine bhi
+            
+            // ab iss data ko me div me show karta hu
+            
+            
+            dbref.on("value", function(snapshot) {
+                console.log(snapshot.val());
+                var edata=snapshot.val();
+                
+                document.getElementById('data').innerHTML="";
+                for(x in edata){
+                    document.getElementById('data').innerHTML+="Name: "+edata[x].name+" and Email "+edata[x].email+"<br>";
+                }
+                
+            }, function (error) {
+               console.log("Error: " + error.code);
+            });
+            
+            //kuch samaj me aya ke nahi aaya smjh thanks
+//            for(x in edata){
+//                    document.getElementById('data').innerHTML+="Name: "+edata[x].name+" and Email "+edata[x].email+"<br>";
+//                }
+            // ye wala logic samaj me aya ha seriously ? yes
+            // bolo lovely ki jai hha ha haaa thanks
+            // auth batauuu ni sikhungi khud se ni aayega to puchungi ok!yup rrook me bootstrap use karta 
+            // esme ok
+        }
+        
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                // User is signed in.
+                var displayName = user.displayName;
+                var email = user.email;
+                var emailVerified = user.emailVerified;
+                var photoURL = user.photoURL;
+                var isAnonymous = user.isAnonymous;
+                var uid = user.uid;
+                var providerData = user.providerData;
+          
+                console.log(email);
+                document.getElementById('pdata').innerHTML="Login Successfully: Name:"+displayName+" email:" +email+"<br><img src='"+photoURL+"' width='30%'>";
+                
+                
+
+
+                // ...
+            } else {
+                // User is signed out.
+                // ...
+                document.getElementById('Logout').style.display = "none";
+//                document.location="google.html";
+                //document.location='index.html';
+            }
+        });
+        
+        
+    </script>
+    </body>
+</html>

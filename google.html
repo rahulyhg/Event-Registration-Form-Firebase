@@ -1,0 +1,108 @@
+<html>
+    <head>
+        <title>welcome</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    </head>
+    <body>
+    
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <center>
+                        <h1>Google Sign In</h1>
+                        <p id="data"></p>
+                        <button id="signIn" class="btn btn-primary">SignIn With Google</button>
+                        <button id="logout" class="btn btn-danger">Logout</button>
+                    </center>
+                </div>
+            </div>
+        </div>
+
+        
+    <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyCuFyl3lPMtlMBw1aO4dmFclNbMLN1hvBM",
+        authDomain: "shiv-d7b06.firebaseapp.com",
+        databaseURL: "https://shiv-d7b06.firebaseio.com",
+        projectId: "shiv-d7b06",
+        storageBucket: "shiv-d7b06.appspot.com",
+        messagingSenderId: "949157004267"
+      };
+      firebase.initializeApp(config);
+        
+        
+         document.getElementById('logout').style.display="none";
+        
+        // call js event on button
+        document.getElementById("signIn").addEventListener('click',SignInWithGoogle);
+        document.getElementById('logout').addEventListener('click', logoutUser);
+        //Till now ok ok pakak yup
+        //// bolo thapar ki jai
+        
+        // jese firebase database me reference use lete hai wase hi authentication ke leye
+        // yaha service provider use lete hai ok? ok
+        var provider = new firebase.auth.GoogleAuthProvider();
+        
+        // means i m using google autherntication ok? ?
+        //bolo thaparbki jai
+        
+        function SignInWithGoogle(){
+            firebase.auth().signInWithPopup(provider).then(function(){
+                alert("SignIn Successfull");
+            }).catch(function(){
+                console.log("error");
+               
+            })
+        }
+        
+        
+        
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                // User is signed in.
+                var displayName = user.displayName;
+                var email = user.email;
+                var emailVerified = user.emailVerified;
+                var photoURL = user.photoURL;
+                var isAnonymous = user.isAnonymous;
+                var uid = user.uid;
+                var providerData = user.providerData;
+                
+                document.location="db.html";
+                
+//                document.getElementById('signIn').style.display="none";
+//                document.getElementById('logout').style.display="block";
+//                console.log(email);
+//                document.getElementById('data').innerHTML="Login Successfully: Name:"+displayName+" email:" +email+"<br><img src='"+photoURL+"' width='30%'>";
+//                
+//                
+
+
+                // ...
+            } else {
+                // User is signed out.
+                // ...
+                document.getElementById('signIn').style.display="block";
+                document.getElementById('logout').style.display="none";
+                //document.location='index.html';
+            }
+        });
+        
+        
+        function logoutUser(){
+            firebase.auth().signOut().then(function(){
+                document.getElementById('signIn').style.display="block";
+                document.getElementById('logout').style.display="none";
+                 document.getElementById('data').innerHTML="Signout Successfully";
+            })
+        }
+        
+        // abi tak kuch samaj me aya? ya
+
+        
+        
+    </script>
+    </body>
+</html>
